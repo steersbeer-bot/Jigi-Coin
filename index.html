@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jigi Coin</title>
+
+<style>
+:root{
+  --bg:#06100b;
+  --panel:#0d1b15;
+  --panel2:#12261d;
+  --line:#1d392b;
+  --text:#f1faf4;
+  --muted:#8fa89a;
+  --green:#36d47b;
+  --gold:#d9b75c;
+  --red:#ff6873;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at top right,#153323 0,#06100b 45%);
+  color:var(--text);
+  font-family:Inter,system-ui,Arial,sans-serif;
+}
+
+button,input,select{
+  font:inherit;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* AUTH */
+
+.auth{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+
+.auth-card{
+  width:min(440px,100%);
+  padding:30px;
+  background:rgba(13,27,21,.97);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 25px 70px #0008;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:900;
+}
+
+.logo span{
+  color:var(--green);
+}
+
+.tag{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.field{
+  margin:14px 0;
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#07130d;
+  color:white;
+  outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:var(--green);
+}
+
+/* BUTTONS */
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 17px;
+  font-weight:750;
+  cursor:pointer;
+}
+
+.primary{
+  background:var(--green);
+  color:#04120a;
+}
+
+.secondary{
+  background:var(--panel2);
+  color:white;
+  border:1px solid var(--line);
+}
+
+.danger{
+  background:#3b171c;
+  color:#ffdfe2;
+}
+
+.wide{
+  width:100%;
+}
+
+/* APP */
+
+.app{
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:235px;
+  background:#07130d;
+  border-right:1px solid var(--line);
+  padding:23px 14px;
+  z-index:10;
+}
+
+.sidebar .logo{
+  padding:0 10px 28px;
+}
+
+.nav button{
+  display:block;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:13px 12px;
+  text-align:left;
+  border-radius:10px;
+  margin:2px 0;
+  cursor:pointer;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:var(--panel2);
+  color:#fff;
+}
+
+.admin-trigger{
+  position:absolute;
+  bottom:10px;
+  left:25px;
+  color:#43584d;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.main{
+  margin-left:235px;
+  padding:27px;
+  max-width:1500px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:25px;
+}
+
+.avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  cursor:pointer;
+}
+
+/* PAGES */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* CARDS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.card{
+  background:rgba(13,27,21,.9);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:19px;
+  margin-bottom:16px;
+  box-shadow:0 12px 35px #0003;
+}
+
+.label{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.amount{
+  font-size:29px;
+  font-weight:850;
+  margin:9px 0;
+}
+
+.green{
+  color:var(--green);
+}
+
+.gold{
+  color:var(--gold);
+}
+
+.market-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.market{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  padding:15px;
+  border-radius:13px;
+}
+
+.market b{
+  display:block;
+  margin-bottom:8px;
+}
+
+.split{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:16px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:620px;
+}
+
+.table th,
+.table td{
+  padding:13px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+}
+
+.table th{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#123522;
+  color:#79efa6;
+  font-size:11px;
+}
+
+/* FORMS */
+
+.notice{
+  padding:13px;
+  border-radius:10px;
+  background:#211d0d;
+  border:1px solid #604f22;
+  color:#ead58a;
+}
+
+.form-card{
+  max-width:600px;
+}
+
+.footer{
+  color:#52685d;
+  font-size:11px;
+  text-align:center;
+  padding:25px;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#000c;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:30;
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(520px,100%);
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:23px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:70px;
+  }
+
+  .sidebar .logo{
+    font-size:0;
+  }
+
+  .sidebar .logo:after{
+    content:"JC";
+    font-size:21px;
+    color:var(--green);
+  }
+
+  .nav button{
+    font-size:0;
+    text-align:center;
+  }
+
+  .nav button:before{
+    content:"•";
+    font-size:20px;
+  }
+
+  .main{
+    margin-left:70px;
+  }
+
+  .stats,
+  .market-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .split{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px){
+
+  .main{
+    padding:15px;
+  }
+
+  .stats,
+  .market-grid{
+    grid-template-columns:1fr;
+  }
+
+  .topbar h1{
+    font-size:21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN / CREATE ACCOUNT -->
+
+<div id="auth" class="auth">
+
+  <div class="auth-card">
+
+    <div class="logo">
+      Jigi <span>Coin</span>
+    </div>
+
+    <p class="tag" id="authSub">
+      Secure portfolio access
+    </p>
+
+    <div id="signupExtra" class="hidden">
+
+      <div class="field">
+        <label>Full name</label>
+        <input
+          id="regName"
+          type="text"
+          placeholder="Full name"
+        >
+      </div>
+
+    </div>
+
+    <div class="field">
+
+      <label>Email</label>
+
+      <input
+        id="authEmail"
+        type="email"
+        placeholder="Email address"
+      >
+
+    </div>
+
+    <div class="field">
+
+      <label>Password</label>
+
+      <input
+        id="authPassword"
+        type="password"
+        placeholder="Password"
+      >
+
+    </div>
+
+    <button
+      class="btn primary wide"
+      id="authButton"
+      onclick="authenticate()"
+    >
+      Sign in
+    </button>
+
+    <button
+      class="btn secondary wide"
+      style="margin-top:10px"
+      onclick="toggleSignup()"
+    >
+      Create account
+    </button>
+
+    <p class="tag" style="margin-top:18px">
+      Portfolio figures and market values shown in this standalone interface
+      are illustrative and are not connected to a bank, exchange, wallet,
+      card issuer, or payment processor.
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- MAIN APPLICATION -->
+
+<div id="app" class="app hidden">
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      Jigi <span>Coin</span>
+    </div>
+
+    <div class="nav">
+
+      <button
+        class="active"
+        onclick="openPage('dashboard',this)"
+      >
+        Dashboard
+      </button>
+
+      <button
+        onclick="openPage('portfolio',this)"
+      >
+        Portfolio
+      </button>
+
+      <button
+        onclick="openPage('transactions',this)"
+      >
+        Transactions
+      </button>
+
+      <button
+        onclick="openPage('deposit',this)"
+      >
+        Deposit
+      </button>
+
+      <button
+        onclick="openPage('withdraw',this)"
+      >
+        Withdraw
+      </button>
+
+      <button
+        onclick="openPage('markets',this)"
+      >
+        Markets
+      </button>
+
+      <button
+        onclick="openPage('profile',this)"
+      >
+        Profile
+      </button>
+
+    </div>
+
+    <div
+      class="admin-trigger"
+      onclick="adminLogin()"
+    >
+      Jigi
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div>
+
+        <div class="label">
+          Jigi Coin
+        </div>
+
+        <h1 id="pageTitle">
+          Dashboard
+        </h1>
+
+      </div>
+
+      <div
+        class="avatar"
+        onclick="openPage('profile')"
+      >
+        JC
+      </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+      id="dashboard"
+      class="page active"
+    >
+
+      <div class="stats">
+
+        <div class="card">
+
+          <div class="label">
+            Portfolio value
+          </div>
+
+          <div
+            class="amount"
+            id="balance"
+          >
+            $300,000.00
+          </div>
+
+          <div class="green">
+            +8.42% this period
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="label">
+            Available balance
+          </div>
+
+          <div
+            class="amount"
+            id="available"
+          >
+            $300,000.00
+          </div>
+
+          <div class="label">
+            Current account balance
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="label">
+            Invested
+          </div>
+
+          <div class="amount">
+            $0.00
+          </div>
+
+          <div class="label">
+            No active allocation
+          </div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="label">
+            Account status
+          </div>
+
+          <div
+            class="amount"
+            style="font-size:20px"
+          >
+            Active
+          </div>
+
+          <span class="badge">
+            Account active
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="split">
+
+        <div>
+
+          <div class="card">
+
+            <h2>
+              Global market view
+            </h2>
+
+            <div class="market-grid">
+
+              <div class="market">
+
+                <b>
+                  Bitcoin · BTC
+                </b>
+
+                $67,842
+
+                <span class="green">
+                  +2.1%
+                </span>
+
+              </div>
+
+
+              <div class="market">
+
+                <b>
+                  Ethereum · ETH
+                </b>
+
+                $3,420
+
+                <span class="green">
+                  +1.4%
+                </span>
+
+              </div>
+
+
+              <div class="market">
+
+                <b>
+                  Solana · SOL
+                </b>
+
+                $181
+
+                <span class="green">
+                  +3.7%
+                </span>
+
+              </div>
+
+
+              <div class="market">
+
+                <b>
+                  USD
+                </b>
+
+                1.0000
+
+                <span class="label">
+                  stable
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <h2>
+              Recent activity
+            </h2>
+
+            <div id="recent"></div>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <div class="card">
+
+            <h2>
+              Quick actions
+            </h2>
+
+            <div class="actions">
+
+              <button
+                class="btn primary"
+                onclick="openPage('deposit')"
+              >
+                Deposit
+              </button>
+
+              <button
+                class="btn secondary"
+                onclick="openPage('withdraw')"
+              >
+                Withdraw
+              </button>
+
+              <button
+                class="btn secondary"
+                onclick="openPage('transactions')"
+              >
+                History
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Account security
+            </h3>
+
+            <p class="tag">
+              Keep your account credentials private and use
+              server-side authentication before connecting a real
+              financial service.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer">
+        Jigi Coin
+      </div>
+
+    </section>
+
+
+    <!-- PORTFOLIO -->
+
+    <section
+      id="portfolio"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          Portfolio
+        </h2>
+
+        <p class="tag">
+          Portfolio overview
+        </p>
+
+        <div
+          class="amount"
+          id="portfolioBalance"
+        >
+          $300,000.00
+        </div>
+
+        <div class="market-grid">
+
+          <div class="market">
+            <b>Cash</b>
+            $300,000.00
+          </div>
+
+          <div class="market">
+            <b>Investments</b>
+            $0.00
+          </div>
+
+          <div class="market">
+            <b>Change</b>
+            <span class="green">
+              +8.42%
+            </span>
+          </div>
+
+          <div class="market">
+            <b>Allocation</b>
+            100% cash
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TRANSACTIONS -->
+
+    <section
+      id="transactions"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          Transaction history
+        </h2>
+
+        <div class="table-wrap">
+
+          <table class="table">
+
+            <thead>
+
+              <tr>
+                <th>Date</th>
+                <th>Reference</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="txBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DEPOSIT -->
+
+    <section
+      id="deposit"
+      class="page"
+    >
+
+      <div class="card form-card">
+
+        <h2>
+          Deposit
+        </h2>
+
+        <p class="tag">
+          Submit a portfolio funding request.
+        </p>
+
+        <div class="field">
+
+          <label>
+            Amount (USD)
+          </label>
+
+          <input
+            id="depositAmount"
+            type="number"
+            min="0"
+            placeholder="0.00"
+          >
+
+        </div>
+
+        <button
+          class="btn primary"
+          onclick="submitDeposit()"
+        >
+          Submit request
+        </button>
+
+        <p
+          id="depositMsg"
+          class="tag"
+        ></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- WITHDRAW -->
+
+    <section
+      id="withdraw"
+      class="page"
+    >
+
+      <div class="card form-card">
+
+        <h2>
+          Withdraw
+        </h2>
+
+        <div class="notice">
+
+          <b>
+            Debit card ordering
+          </b>
+
+          <br>
+
+          Card-ordering amount shown by this interface:
+          <b>$500</b>.
+
+          No payment is processed by this file.
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Withdrawal amount (USD)
+          </label>
+
+          <input
+            id="withdrawAmount"
+            type="number"
+            min="0"
+            placeholder="0.00"
+          >
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          onclick="submitWithdrawal()"
+        >
+          Request withdrawal
+        </button>
+
+
+        <button
+          class="btn secondary"
+          style="margin-left:7px"
+          onclick="orderCard()"
+        >
+          Order debit card · $500
+        </button>
+
+
+        <p
+          id="withdrawMsg"
+          class="tag"
+        ></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKETS -->
+
+    <section
+      id="markets"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          Markets
+        </h2>
+
+        <p class="tag">
+          Illustrative market values.
+        </p>
+
+        <div class="market-grid">
+
+          <div class="market">
+            <b>BTC/USD</b>
+            $67,842
+            <br>
+            <span class="green">
+              +2.10%
+            </span>
+          </div>
+
+          <div class="market">
+            <b>ETH/USD</b>
+            $3,420
+            <br>
+            <span class="green">
+              +1.40%
+            </span>
+          </div>
+
+          <div class="market">
+            <b>SOL/USD</b>
+            $181
+            <br>
+            <span class="green">
+              +3.70%
+            </span>
+          </div>
+
+          <div class="market">
+            <b>Gold/USD</b>
+            $2,410
+            <br>
+            <span class="green">
+              +0.60%
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section
+      id="profile"
+      class="page"
+    >
+
+      <div class="card form-card">
+
+        <h2>
+          Profile
+        </h2>
+
+
+        <div class="field">
+
+          <label>
+            Full name
+          </label>
+
+          <input
+            id="profileName"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Email
+          </label>
+
+          <input
+            id="profileEmail"
+          >
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          onclick="saveProfile()"
+        >
+          Save changes
+        </button>
+
+
+        <button
+          class="btn danger"
+          style="margin-left:7px"
+          onclick="logout()"
+        >
+          Sign out
+        </button>
+
+
+        <p
+          id="profileMsg"
+          class="tag"
+        ></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ADMIN -->
+
+    <section
+      id="admin"
+      class="page"
+    >
+
+      <div class="card">
+
+        <h2>
+          Administrator
+        </h2>
+
+        <p class="tag">
+          Local account-management controls.
+        </p>
+
+
+        <div class="form-card">
+
+          <div class="field">
+
+            <label>
+              Displayed balance
+            </label>
+
+            <input
+              id="adminBalance"
+              type="number"
+            >
+
+          </div>
+
+
+          <button
+            class="btn primary"
+            onclick="saveBalance()"
+          >
+            Save balance
+          </button>
+
+
+          <h3>
+            Add transaction
+          </h3>
+
+
+          <div class="field">
+
+            <label>
+              Amount
+            </label>
+
+            <input
+              id="adminTxAmount"
+              type="number"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Type
+            </label>
+
+            <select id="adminTxType">
+
+              <option>
+                Deposit
+              </option>
+
+              <option>
+                Withdrawal
+              </option>
+
+              <option>
+                Investment
+              </option>
+
+              <option>
+                Return
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            class="btn secondary"
+            onclick="addTransaction()"
+          >
+            Add transaction
+          </button>
+
+        </div>
+
+
+        <div
+          class="table-wrap"
+          style="margin-top:20px"
+        >
+
+          <table class="table">
+
+            <thead>
+
+              <tr>
+                <th>Date</th>
+                <th>Reference</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="adminBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- ADMIN MODAL -->
+
+<div
+  id="modal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <h2>
+      Administrator access
+    </h2>
+
+    <div class="field">
+
+      <label>
+        Password
+      </label>
+
+      <input
+        id="adminPassword"
+        type="password"
+        placeholder="Administrator password"
+      >
+
+    </div>
+
+
+    <button
+      class="btn primary"
+      onclick="openAdmin()"
+    >
+      Continue
+    </button>
+
+
+    <button
+      class="btn secondary"
+      style="margin-left:6px"
+      onclick="closeModal()"
+    >
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   LOCAL ACCOUNT DATA
+========================================= */
+
+const STORAGE_KEY = "jigi_coin_account";
+
+let state =
+JSON.parse(
+  localStorage.getItem(STORAGE_KEY)
+) || {
+
+  name:"Account Holder",
+
+  email:"",
+
+  password:"",
+
+  balance:300000,
+
+  tx:[
+    {
+      date:new Date().toISOString().slice(0,10),
+
+      ref:"JIGI-001",
+
+      type:"Deposit",
+
+      amount:300000,
+
+      status:"Completed"
+    }
+  ]
+
+};
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+const $ = id =>
+document.getElementById(id);
+
+
+function money(value){
+
+  return "$" +
+  Number(value || 0).toLocaleString(
+    "en-US",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+function save(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(state)
+  );
+
+}
+
+
+/* =========================================
+   CREATE ACCOUNT / LOGIN
+========================================= */
+
+let signupMode = false;
+
+
+function toggleSignup(){
+
+  signupMode = !signupMode;
+
+  $("signupExtra")
+    .classList
+    .toggle("hidden",!signupMode);
+
+  $("authSub").textContent =
+    signupMode
+    ? "Create your account"
+    : "Secure portfolio access";
+
+  $("authButton").textContent =
+    signupMode
+    ? "Create account"
+    : "Sign in";
+
+}
+
+
+function authenticate(){
+
+  const email =
+    $("authEmail").value.trim();
+
+  const password =
+    $("authPassword").value;
+
+
+  if(!email){
+
+    alert("Please enter your email.");
+
+    return;
+
+  }
+
+
+  if(password.length < 6){
+
+    alert(
+      "Password must contain at least 6 characters."
+    );
+
+    return;
+
+  }
+
+
+  /* CREATE ACCOUNT */
+
+  if(signupMode){
+
+    state.name =
+      $("regName").value.trim()
+      || "Account Holder";
+
+    state.email = email;
+
+    state.password = password;
+
+    save();
+
+    enterApp();
+
+    return;
+
+  }
+
+
+  /* LOGIN */
+
+  if(!state.email){
+
+    alert(
+      "No account exists yet. Select Create account first."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    email !== state.email ||
+    password !== state.password
+  ){
+
+    alert(
+      "Incorrect email or password."
+    );
+
+    return;
+
+  }
+
+
+  enterApp();
+
+}
+
+
+function enterApp(){
+
+  $("auth")
+    .classList
+    .add("hidden");
+
+  $("app")
+    .classList
+    .remove("hidden");
+
+  render();
+
+}
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function render(){
+
+  $("balance").textContent =
+    money(state.balance);
+
+  $("available").textContent =
+    money(state.balance);
+
+  $("portfolioBalance").textContent =
+    money(state.balance);
+
+
+  $("profileName").value =
+    state.name;
+
+  $("profileEmail").value =
+    state.email;
+
+
+  $("adminBalance").value =
+    state.balance;
+
+
+  $("txBody").innerHTML =
+    state.tx.map(t => `
+
+      <tr>
+
+        <td>
+          ${t.date}
+        </td>
+
+        <td>
+          ${t.ref}
+        </td>
+
+        <td>
+          ${t.type}
+        </td>
+
+        <td>
+          ${money(t.amount)}
+        </td>
+
+        <td>
+          <span class="badge">
+            ${t.status || "Completed"}
+          </span>
+        </td>
+
+      </tr>
+
+    `).join("");
+
+
+  $("adminBody").innerHTML =
+    state.tx.map(t => `
+
+      <tr>
+
+        <td>
+          ${t.date}
+        </td>
+
+        <td>
+          ${t.ref}
+        </td>
+
+        <td>
+          ${t.type}
+        </td>
+
+        <td>
+          ${money(t.amount)}
+        </td>
+
+        <td>
+          ${t.status || "Completed"}
+        </td>
+
+      </tr>
+
+    `).join("");
+
+
+  $("recent").innerHTML =
+    state.tx
+      .slice(0,3)
+      .map(t => `
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            padding:10px 0;
+            border-bottom:1px solid var(--line)
+          "
+        >
+
+          <span>
+
+            ${t.type}
+
+            <br>
+
+            <span class="label">
+              ${t.date}
+            </span>
+
+          </span>
+
+          <b>
+            ${money(t.amount)}
+          </b>
+
+        </div>
+
+      `)
+      .join("");
+
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function openPage(id,button){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      p => p.classList.remove("active")
+    );
+
+
+  $(id)
+    .classList
+    .add("active");
+
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(
+      b => b.classList.remove("active")
+    );
+
+
+  if(button){
+
+    button.classList.add("active");
+
+  }
+
+
+  $("pageTitle").textContent =
+    id.charAt(0).toUpperCase()
+    + id.slice(1);
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* =========================================
+   DEPOSIT
+========================================= */
+
+function submitDeposit(){
+
+  const amount =
+    Number(
+      $("depositAmount").value
+    );
+
+
+  if(amount <= 0){
+
+    $("depositMsg").textContent =
+      "Enter a valid amount.";
+
+    return;
+
+  }
+
+
+  $("depositMsg").textContent =
+    "Deposit request recorded locally.";
+
+}
+
+
+/* =========================================
+   WITHDRAWAL
+========================================= */
+
+function submitWithdrawal(){
+
+  const amount =
+    Number(
+      $("withdrawAmount").value
+    );
+
+
+  if(amount <= 0){
+
+    $("withdrawMsg").textContent =
+      "Enter a valid amount.";
+
+    return;
+
+  }
+
+
+  $("withdrawMsg").textContent =
+    "Withdrawal request recorded locally.";
+
+}
+
+
+function orderCard(){
+
+  $("withdrawMsg").textContent =
+    "Card-ordering option selected: $500. No payment was processed.";
+
+}
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+function saveProfile(){
+
+  state.name =
+    $("profileName").value.trim()
+    || state.name;
+
+
+  state.email =
+    $("profileEmail").value.trim()
+    || state.email;
+
+
+  save();
+
+  render();
+
+  $("profileMsg").textContent =
+    "Profile saved.";
+
+}
+
+
+function logout(){
+
+  $("app")
+    .classList
+    .add("hidden");
+
+  $("auth")
+    .classList
+    .remove("hidden");
+
+  $("authPassword").value = "";
+
+}
+
+
+/* =========================================
+   ADMIN
+========================================= */
+
+function adminLogin(){
+
+  $("modal")
+    .classList
+    .add("open");
+
+  $("adminPassword").value = "";
+
+}
+
+
+function closeModal(){
+
+  $("modal")
+    .classList
+    .remove("open");
+
+}
+
+
+function openAdmin(){
+
+  if(
+    $("adminPassword").value
+    !== "JigiAdmin"
+  ){
+
+    alert(
+      "Incorrect administrator password."
+    );
+
+    return;
+
+  }
+
+
+  closeModal();
+
+  openPage("admin");
+
+  render();
+
+}
+
+
+function saveBalance(){
+
+  const amount =
+    Number(
+      $("adminBalance").value
+    );
+
+
+  if(amount < 0){
+
+    alert(
+      "Balance cannot be negative."
+    );
+
+    return;
+
+  }
+
+
+  state.balance = amount;
+
+  save();
+
+  render();
+
+  alert(
+    "Displayed balance updated."
+  );
+
+}
+
+
+function addTransaction(){
+
+  const amount =
+    Number(
+      $("adminTxAmount").value
+    );
+
+
+  if(amount <= 0){
+
+    alert(
+      "Enter an amount."
+    );
+
+    return;
+
+  }
+
+
+  const reference =
+    "JIGI-" +
+    Date.now()
+      .toString()
+      .slice(-7);
+
+
+  state.tx.unshift({
+
+    date:
+      new Date()
+        .toISOString()
+        .slice(0,10),
+
+    ref:
+      reference,
+
+    type:
+      $("adminTxType").value,
+
+    amount:
+      amount,
+
+    status:
+      "Completed"
+
+  });
+
+
+  save();
+
+  render();
+
+  $("adminTxAmount").value = "";
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+render();
+
+</script>
+
+</body>
+</html>
